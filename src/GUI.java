@@ -13,26 +13,25 @@ import javax.swing.Box;
 import javax.swing.JTextPane;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
-/*
-import com.jgoodies.forms.factories.DefaultComponentFactory;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
-*/
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollBar;
 import javax.swing.JTextArea;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GUI extends JFrame
 {
 	public GUI() {
-		setResizable(false);
+		setSize(900, 600);
 		getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(6, 6, 809, 486);
 		getContentPane().add(tabbedPane);
+		
+		
+/////////////////		THIS IS THE Wizard SECTION //////////////////////////
+
 		
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Wizard", null, panel, null);
@@ -48,7 +47,7 @@ public class GUI extends JFrame
 		lblWizard.setBounds(16, 33, 67, 16);
 		panel.add(lblWizard);
 		
-		textField_1 = new JTextField();
+/*		textField_1 = new JTextField();
 		textField_1.setEditable(false);
 		textField_1.setBounds(419, 29, 122, 28);
 		panel.add(textField_1);
@@ -81,11 +80,35 @@ public class GUI extends JFrame
 		Label label = new Label("Level");
 		label.setBounds(344, 29, 69, 23);
 		panel.add(label);
-		
+*/		
 		Button button = new Button("Search");
 		button.setBounds(209, 29, 76, 23);
 		panel.add(button);
 		
+		wizardRes = new JTextArea();
+		wizardRes.setEditable(false);
+		wizardRes.setColumns(10);
+		wizardRes.setBounds(350, 25, 300, 400);
+		panel.add(wizardRes);
+		String wName = "";
+		String queryRes = "Gothmog Doomsman of the Valar, 5, 100, Necromancer, 100, 100, Roofie, 100101";
+
+/*		class searchWIZ implements ActionListener {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				wName=textField.getText();
+				
+				
+				wizardRes.setText(queryRes + "\n" + wName);
+			
+			}
+		
+		}
+
+*/
+
+		
+/*		
 		Label label_1 = new Label("Attack");
 		label_1.setBounds(344, 69, 69, 23);
 		panel.add(label_1);
@@ -111,17 +134,14 @@ public class GUI extends JFrame
 		textField_11.setColumns(10);
 		textField_11.setBounds(419, 231, 122, 28);
 		panel.add(textField_11);
+*/		
+
 		
-		label_8 = new Label("Pet Name");
-		label_8.setBounds(344, 271, 69, 23);
-		panel.add(label_8);
 		
-		textField_12 = new JTextField();
-		textField_12.setEditable(false);
-		textField_12.setColumns(10);
-		textField_12.setBounds(419, 271, 122, 28);
-		panel.add(textField_12);
 		
+/////////////////		THIS IS THE GUILD SECTION //////////////////////////
+
+
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Guild", null, panel_1, null);
 		panel_1.setLayout(null);
@@ -160,6 +180,10 @@ public class GUI extends JFrame
 		textField_8.setBounds(459, 78, 122, 28);
 		panel_1.add(textField_8);
 		
+		
+/////////////////		THIS IS THE TERRITORY SECTION //////////////////////////
+		
+		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Territory", null, panel_2, null);
 		panel_2.setLayout(null);
@@ -186,6 +210,31 @@ public class GUI extends JFrame
 		textField_10.setColumns(10);
 		textField_10.setBounds(473, 37, 122, 28);
 		panel_2.add(textField_10);
+		
+		
+/////////////////		THIS IS THE WAR SECTION //////////////////////////
+		
+		
+		JPanel warPanel = new JPanel();
+		tabbedPane.addTab("War", null, warPanel, null);
+		warPanel.setLayout(null);
+		
+		JLabel lblWar = new JLabel("War");
+		lblWar.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		lblWar.setBounds(16, 33, 67, 16);
+		warPanel.add(lblWar);
+
+		Button MVWbutton = new Button("Most Valuable Wizard (by war aggressor)");
+		MVWbutton.setBounds(100, 29, 300, 23);
+		warPanel.add(MVWbutton);
+		
+		textField_13 = new JTextField();
+		textField_13.setColumns(10);
+		textField_13.setBounds(473, 37, 122, 28);
+		warPanel.add(textField_10);
+		
+
+		
 	}
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 300;
@@ -211,4 +260,15 @@ public class GUI extends JFrame
 	private JTextField textField_11;
 	private Label label_8;
 	private JTextField textField_12;
+	private JTextField textField_13;
+	private JTextArea wizardRes;
+	private JTextArea warRes;
+	
+	public static void main(String args[]) {
+		JFrame fr = new GUI();
+		fr.setTitle("NWA");
+		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		fr.setVisible(true);
+	
+	}
 }

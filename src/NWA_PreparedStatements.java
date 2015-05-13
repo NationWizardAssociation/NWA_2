@@ -9,7 +9,8 @@ public class NWA_PreparedStatements {
 	
 	static Scanner scan = new Scanner(System.in);
 	Connection connection;
-    
+	String genS = "";
+    String genADD = "";
 	
 	public NWA_PreparedStatements(){
 		
@@ -24,33 +25,92 @@ public class NWA_PreparedStatements {
 	}
     
 	
-	public String genericStatement(String s){
-		String[] statement = s.split(" ");
-		if(statement[0].equals("SELECT")){
-			return genericSelect(statement); 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void searchWizard(String s){
+		try {
+		String q = "";
+		String name;
+		String spellset;
+		String level;
+		
+		String[] atr = s.split(",");
+		
+		boolean and = false;
+		for(int i = 0; i < atr.length; i++){
+			
+			if(atr[i].equals("name")){
+				q = q + ("WIZname = " +"'" + atr[++i] +"'");
+				if(i != atr.length-1){
+					and = true;
+				}
+			}
+			else if(atr[i].equals("spellset")){
+				if(and){
+					q = q + " AND ";
+				}
+				q = q + ("WIZspellset = " + "'" + atr[++i] + "'");
+				if(i != atr.length-1){
+					and = true;
+				}
+			}
+			else if(atr[i].equals("level")){
+				if(and){
+					q = q + " AND ";
+				}
+				q = q + ("WIZlevel = " + atr[++i]);
+				if(i != atr.length-1){
+					and = true;
+				}
+			}
+			
 		}
-		else if(statement[0].equals("INSERT"))
-			return genericInsert(statement);
-		else if(statement[0].equals("UPDATE"))
-			return genericUpdate(statement);
-		else return "Invalid Query";
-	}
+		
+		System.out.println(q);
+		String stmt = "SELECT WIZname, WIZguild, WIZlevel, WIZspellset, WIZhealth, WIZatk, WIZdef FROM wizard WHERE " + q;
+		PreparedStatement p = connection.prepareStatement(stmt);
 	
-	public String genericSelect(String[] statement){
+		ResultSet r = p.executeQuery();
+		
+		while(r.next()) {
+			System.out.println("name: " + r.getString("WIZname"));
+			System.out.println("Guild: " + r.getInt("WIZguild"));
+			System.out.println("level: " + r.getInt("WIZlevel"));
+			System.out.println("Specialty: " + r.getString("WIZspellset"));
+			System.out.println("health: " + r.getInt("WIZhealth"));
+			System.out.println("attack: " + r.getInt("WIZatk"));
+			System.out.println("defense: " + r.getInt("WIZdef"));
+			System.out.println("-----------------------------");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//System.out.println(q);
+		
+
+		
+		
+		
+		
 		
 	}
-	public String genericInsert(String[] statement){
-		
-	}
-	public String genericUpdate(String[] statement){
-		
-	}
-	public void executeGenericStatement(String s){
-		
-	}
-	
-	
     
+	
+	
+	
+	
 	public void findWizardByName(){
 	try {
 		while(true){
