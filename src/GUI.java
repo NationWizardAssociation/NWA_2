@@ -18,6 +18,14 @@ import javax.swing.JScrollBar;
 import javax.swing.JTextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.util.Scanner;
+
 
 public class GUI extends JFrame
 {
@@ -37,107 +45,178 @@ public class GUI extends JFrame
 		tabbedPane.addTab("Wizard", null, panel, null);
 		panel.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(82, 29, 122, 28);
-		panel.add(textField);
-		textField.setColumns(10);
+		wizTxtName = new JTextField();
+		wizTxtName.setBounds(82, 29, 122, 28);
+		panel.add(wizTxtName);
+		wizTxtName.setColumns(10);
+		
+		wizTxtLev = new JTextField();
+		wizTxtLev.setBounds(82, 60, 122, 28);
+		panel.add(wizTxtLev);
+		wizTxtLev.setColumns(10);
+		
+		wizTxtSpell = new JTextField();
+		wizTxtSpell.setBounds(82, 90, 122, 28);
+		panel.add(wizTxtSpell);
+		wizTxtSpell.setColumns(10);
+		
+		wizTxtHeal = new JTextField();
+		wizTxtHeal.setBounds(82, 120, 122, 28);
+		panel.add(wizTxtHeal);
+		wizTxtHeal.setColumns(10);
+		
+		wizTxtAtk = new JTextField();
+		wizTxtAtk.setBounds(82, 150, 122, 28);
+		panel.add(wizTxtAtk);
+		wizTxtAtk.setColumns(10);
+		
+		wizTxtDef = new JTextField();
+		wizTxtDef.setBounds(82, 180, 122, 28);
+		panel.add(wizTxtDef);
+		wizTxtDef.setColumns(10);
+		
+		wizTxtPet = new JTextField();
+		wizTxtPet.setBounds(82, 210, 122, 28);
+		panel.add(wizTxtPet);
+		wizTxtPet.setColumns(10);
+		
+		wizTxtGuild = new JTextField();
+		wizTxtGuild.setBounds(82, 240, 122, 28);
+		panel.add(wizTxtGuild);
+		wizTxtGuild.setColumns(10);
 		
 		JLabel lblWizard = new JLabel("Wizard");
-		lblWizard.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblWizard.setBounds(16, 33, 67, 16);
+		lblWizard.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblWizard.setBounds(16, 30, 67, 16);
 		panel.add(lblWizard);
 		
-/*		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setBounds(419, 29, 122, 28);
-		panel.add(textField_1);
-		textField_1.setColumns(10);
+		JLabel lblWizard2 = new JLabel("Level");
+		lblWizard2.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblWizard2.setBounds(16, 60, 67, 16);
+		panel.add(lblWizard2);
 		
-		textField_2 = new JTextField();
-		textField_2.setEditable(false);
-		textField_2.setColumns(10);
-		textField_2.setBounds(419, 69, 122, 28);
-		panel.add(textField_2);
+		JLabel lblWizard3 = new JLabel("Spellset");
+		lblWizard3.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblWizard3.setBounds(16, 90, 67, 16);
+		panel.add(lblWizard3);
 		
-		textField_3 = new JTextField();
-		textField_3.setEditable(false);
-		textField_3.setColumns(10);
-		textField_3.setBounds(419, 109, 122, 28);
-		panel.add(textField_3);
+		JLabel lblWizard4 = new JLabel("**Health");
+		lblWizard4.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblWizard4.setBounds(16, 120, 67, 16);
+		panel.add(lblWizard4);
 		
-		textField_4 = new JTextField();
-		textField_4.setEditable(false);
-		textField_4.setColumns(10);
-		textField_4.setBounds(419, 149, 122, 28);
-		panel.add(textField_4);
+		JLabel lblWizard5 = new JLabel("**Attack");
+		lblWizard5.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblWizard5.setBounds(16, 150, 67, 16);
+		panel.add(lblWizard5);
 		
-		textField_5 = new JTextField();
-		textField_5.setEditable(false);
-		textField_5.setColumns(10);
-		textField_5.setBounds(419, 189, 122, 28);
-		panel.add(textField_5);
+		JLabel lblWizard6 = new JLabel("**Deffense");
+		lblWizard6.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblWizard6.setBounds(16, 180, 67, 16);
+		panel.add(lblWizard6);
 		
-		Label label = new Label("Level");
-		label.setBounds(344, 29, 69, 23);
-		panel.add(label);
-*/		
+		JLabel lblWizard7 = new JLabel("**Pet");
+		lblWizard7.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblWizard7.setBounds(16, 210, 67, 16);
+		panel.add(lblWizard7);
+		
+		JLabel lblWizard8 = new JLabel("**Guild");
+		lblWizard8.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblWizard8.setBounds(16, 240, 67, 16);
+		panel.add(lblWizard8);
+		
+		JLabel lblWizard9 = new JLabel("Double asteriks (**) denotes non-searchable attribute.");
+		lblWizard9.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblWizard9.setBounds(16, 400, 600, 16);
+		panel.add(lblWizard9);
+		
+		JLabel lblWizard10 = new JLabel("All attributes are required for Adding a Wizard.");
+		lblWizard10.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		lblWizard10.setBounds(16, 420, 600, 16);
+		panel.add(lblWizard10);
+
 		Button button = new Button("Search");
 		button.setBounds(209, 29, 76, 23);
 		panel.add(button);
 		
+		Button addWiz = new Button("Add");
+		addWiz.setBounds(209, 60, 76, 23);
+		panel.add(addWiz);
+		
+		Button clearWiz = new Button("Clear");
+		clearWiz.setBounds(209, 90, 76, 23);
+		panel.add(clearWiz);
+		
+		JLabel wizStats = new JLabel("(name, level, spellset, health, attack, defense, pet, guild)");
+		wizStats.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		wizStats.setBounds(300, 20, 400, 16);
+		panel.add(wizStats);		
+		
 		wizardRes = new JTextArea();
 		wizardRes.setEditable(false);
 		wizardRes.setColumns(10);
-		wizardRes.setBounds(350, 25, 300, 400);
+		wizardRes.setBounds(300, 40, 400, 300);
 		panel.add(wizardRes);
-		String wName = "";
-		String queryRes = "Gothmog Doomsman of the Valar, 5, 100, Necromancer, 100, 100, Roofie, 100101";
 
-/*		class searchWIZ implements ActionListener {
-			
+		queryRes = "Gothmog Doomsman of the Valar, 5, 100, Necromancer, 100, 100, Roofie, 100101";
+
+		//javac GUI.java 
+		//java -classpath ".:sqlite-jdbc-3.7.2.jar" GUI
+
+
+		class searchWIZ implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
-				wName=textField.getText();
+
+				wQuery = wizTxtName.getText() + ", " + wizTxtLev.getText() + ", " + 
+						wizTxtSpell.getText();
 				
+				//preparedStatement(statm);
 				
-				wizardRes.setText(queryRes + "\n" + wName);
-			
+				wizardRes.setText(queryRes);
 			}
-		
 		}
+		
+		ActionListener seaWIZ = new searchWIZ();
+		button.addActionListener(seaWIZ);
 
-*/
 
-		
-/*		
-		Label label_1 = new Label("Attack");
-		label_1.setBounds(344, 69, 69, 23);
-		panel.add(label_1);
-		
-		label_2 = new Label("Defense");
-		label_2.setBounds(344, 109, 69, 23);
-		panel.add(label_2);
-		
-		label_3 = new Label("SpellSet");
-		label_3.setBounds(344, 149, 69, 23);
-		panel.add(label_3);
-		
-		label_4 = new Label("Guild ");
-		label_4.setBounds(344, 189, 69, 23);
-		panel.add(label_4);
-		
-		label_7 = new Label("Pet Name");
-		label_7.setBounds(344, 231, 69, 23);
-		panel.add(label_7);
-		
-		textField_11 = new JTextField();
-		textField_11.setEditable(false);
-		textField_11.setColumns(10);
-		textField_11.setBounds(419, 231, 122, 28);
-		panel.add(textField_11);
-*/		
+		class adWIZ implements ActionListener {
+			public void actionPerformed(ActionEvent arg0) {
 
+				wQuery = wizTxtName.getText() + ", " + wizTxtLev.getText() + ", " + 
+						wizTxtSpell.getText() + ", " + wizTxtHeal.getText()+ ", " + 
+						wizTxtAtk.getText()+ ", " + wizTxtDef.getText()+ ", " + 
+						wizTxtPet.getText()+ ", " + wizTxtGuild.getText();
+				
+				//preparedStatement(statm);
+				
+				wizardRes.setText(queryRes + "\n" + wQuery);
+			}
+		}
 		
+		ActionListener addingWIZ = new adWIZ();
+		addWiz.addActionListener(addingWIZ);
 		
+		class cleaWIZ implements ActionListener {
+			public void actionPerformed(ActionEvent arg0) {
+
+				wizTxtName.setText("");
+				wizTxtLev.setText("");
+				wizTxtSpell.setText("");
+				wizTxtHeal.setText("");
+				wizTxtAtk.setText("");
+				wizTxtDef.setText("");
+				wizTxtPet.setText("");
+				wizTxtGuild.setText("");
+				
+			}
+		}
+		
+		ActionListener clearingWIZ = new cleaWIZ();
+		clearWiz.addActionListener(clearingWIZ);
+
+
+
 		
 /////////////////		THIS IS THE GUILD SECTION //////////////////////////
 
@@ -146,39 +225,68 @@ public class GUI extends JFrame
 		tabbedPane.addTab("Guild", null, panel_1, null);
 		panel_1.setLayout(null);
 		
-		lblNewLabel = new JLabel("Guild");
-		lblNewLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblNewLabel.setBounds(27, 38, 55, 16);
-		panel_1.add(lblNewLabel);
+		JLabel gldLblNam = new JLabel("Guild Name");
+		gldLblNam.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		gldLblNam.setBounds(27, 38, 70, 16);
+		panel_1.add(gldLblNam);
 		
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		textField_6.setBounds(80, 34, 122, 28);
-		panel_1.add(textField_6);
+		JLabel gldLblID = new JLabel("Guild ID");
+		gldLblID.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		gldLblID.setBounds(27, 80, 55, 16);
+		panel_1.add(gldLblID);
+		
+		gldTxtName = new JTextField();
+		gldTxtName.setColumns(10);
+		gldTxtName.setBounds(100, 34, 122, 28);
+		panel_1.add(gldTxtName);
+		
+		gldTxtId = new JTextField();
+		gldTxtId.setColumns(10);
+		gldTxtId.setBounds(100, 80, 122, 28);
+		panel_1.add(gldTxtId);
 		
 		button_1 = new Button("Search");
-		button_1.setBounds(208, 38, 76, 23);
+		button_1.setBounds(220, 38, 76, 23);
 		panel_1.add(button_1);
 		
-		textField_7 = new JTextField();
-		textField_7.setEditable(false);
-		textField_7.setColumns(10);
-		textField_7.setBounds(459, 38, 122, 28);
-		panel_1.add(textField_7);
+		Button addGld = new Button("Add");
+		addGld.setBounds(220, 80, 76, 23);
+		panel_1.add(addGld);
 		
-		label_5 = new Label("Wins");
-		label_5.setBounds(384, 38, 69, 23);
+		label_5 = new Label("Wins, Losses");
+		label_5.setBounds(384, 38, 100, 23);
 		panel_1.add(label_5);
 		
-		label_6 = new Label("Losses");
-		label_6.setBounds(384, 78, 69, 23);
-		panel_1.add(label_6);
+		gWinLoss = new JTextField();
+		gWinLoss.setEditable(false);
+		gWinLoss.setColumns(10);
+		gWinLoss.setBounds(384, 60, 122, 28);
+		panel_1.add(gWinLoss);
 		
-		textField_8 = new JTextField();
-		textField_8.setEditable(false);
-		textField_8.setColumns(10);
-		textField_8.setBounds(459, 78, 122, 28);
-		panel_1.add(textField_8);
+		
+		gTerritories = new JTextArea();
+		gTerritories.setEditable(false);
+		gTerritories.setColumns(10);
+		gTerritories.setBounds(27, 150, 300, 300);
+		panel_1.add(gTerritories);
+		
+		gWizards = new JTextArea();
+		gWizards.setEditable(false);
+		gWizards.setColumns(10);
+		gWizards.setBounds(360, 150, 300, 300);
+		panel_1.add(gWizards);
+		
+		gTerr = new JLabel ("Occupied Territories");
+		gTerr.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		gTerr.setBounds(27, 130, 200, 16);
+		panel_1.add(gTerr);
+		
+		gWizz = new JLabel("Wizards Enlisted");
+		gWizz.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		gWizz.setBounds(360, 130, 200, 16);
+		panel_1.add(gWizz);
+		
+		 
 		
 		
 /////////////////		THIS IS THE TERRITORY SECTION //////////////////////////
@@ -199,7 +307,7 @@ public class GUI extends JFrame
 		panel_2.add(textField_9);
 		
 		Button button_2 = new Button("Search");
-		button_2.setBounds(225, 39, 53, 23);
+		button_2.setBounds(225, 39, 76, 23);
 		panel_2.add(button_2);
 		
 		JLabel lblControlledBy = new JLabel("Controlled By");
@@ -214,26 +322,83 @@ public class GUI extends JFrame
 		
 /////////////////		THIS IS THE WAR SECTION //////////////////////////
 		
-		
+
 		JPanel warPanel = new JPanel();
 		tabbedPane.addTab("War", null, warPanel, null);
 		warPanel.setLayout(null);
 		
-		JLabel lblWar = new JLabel("War");
-		lblWar.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		lblWar.setBounds(16, 33, 67, 16);
-		warPanel.add(lblWar);
-
-		Button MVWbutton = new Button("Most Valuable Wizard (by war aggressor)");
-		MVWbutton.setBounds(100, 29, 300, 23);
-		warPanel.add(MVWbutton);
+		
+		JLabel guildIDlab = new JLabel("Guild ID");
+		guildIDlab.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		guildIDlab.setBounds(16, 29, 70, 23);
+		warPanel.add(guildIDlab);
 		
 		textField_13 = new JTextField();
 		textField_13.setColumns(10);
-		textField_13.setBounds(473, 37, 122, 28);
-		warPanel.add(textField_10);
+		textField_13.setBounds(80, 29, 150, 23);
+		warPanel.add(textField_13);
 		
+		Button guildIDbut = new Button("Search");
+		guildIDbut.setBounds(240, 29, 70, 23);
+		warPanel.add(guildIDbut);
 
+
+		JLabel warDec = new JLabel("Wars Declared (aggressor, defender, winner, loser, location)");
+		warDec.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		warDec.setBounds(16, 100, 400, 16);
+		warPanel.add(warDec);
+		
+		warRes = new JTextArea();
+		warRes.setEditable(false);
+		warRes.setColumns(10);
+		warRes.setBounds(16, 120, 400, 300);
+		warPanel.add(warRes);
+		
+/////////////////		THIS IS THE BATTLE SECTION //////////////////////////
+		
+		
+		JPanel battlePanel = new JPanel();
+		tabbedPane.addTab("Battle", null, battlePanel, null);
+		battlePanel.setLayout(null);
+		
+		JLabel bAgres = new JLabel("Aggressor ID");
+		bAgres.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		bAgres.setBounds(16, 29, 80, 23);
+		battlePanel.add(bAgres);
+		
+		JLabel bDef = new JLabel("Defender ID");
+		bDef.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		bDef.setBounds(16, 60, 80, 23);
+		battlePanel.add(bDef);
+		
+		updateLabel = new JLabel("");
+		updateLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		updateLabel.setBounds(16, 150, 150, 23);
+		battlePanel.add(updateLabel);
+		
+		bAggID = new JTextField();
+		bAggID.setBounds(100, 29, 122, 28);
+		battlePanel.add(bAggID);
+		bAggID.setColumns(10);
+		
+		bDefID = new JTextField();
+		bDefID.setBounds(100, 60, 122, 28);
+		battlePanel.add(bDefID);
+		bDefID.setColumns(10);
+		
+		Button battleButton = new Button("Battle");
+		battleButton.setBounds(230, 29, 70, 23);
+		battlePanel.add(battleButton);
+		
+		class addBattle implements ActionListener {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				updateLabel.setText("*tables updated");
+			}
+		}
+		ActionListener battleListener = new addBattle();
+		battleButton.addActionListener(battleListener);
+		
 		
 	}
 	private static final int WIDTH = 400;
@@ -264,7 +429,49 @@ public class GUI extends JFrame
 	private JTextArea wizardRes;
 	private JTextArea warRes;
 	
-	public static void main(String args[]) {
+	private JTextField wizTxtName;
+	private JTextField wizTxtLev;	
+	private JTextField wizTxtSpell;
+	private JTextField wizTxtHeal;
+	private JTextField wizTxtAtk;
+	private JTextField wizTxtDef;
+	private JTextField wizTxtPet;
+	private JTextField wizTxtGuild;
+	
+	private JTextField gldTxtName;
+	private JTextField gldTxtId;
+	private JTextField gWinLoss;
+	private JTextArea gTerritories;
+	private JTextArea gWizards;
+	private JLabel gTerr;
+	private JLabel gWizz;
+	private JLabel updateLabel;
+
+	
+	private JTextField bAggID;
+	private JTextField bDefID;
+	
+	
+	
+	private String wName = "";
+	private String wLev = "";	
+	private String wSpell = "";	
+	private String wHealth = "";
+	private String wAtk = "";
+	private String wDef = "";
+	private String wPet = "";
+	private String wGuild = "";
+	private String wQuery = "";
+	
+	private String gName = "";
+	private String gID = "";
+	
+	
+	
+	String queryRes = "";
+
+	
+	public static void main(String args[])  {
 		JFrame fr = new GUI();
 		fr.setTitle("NWA");
 		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
