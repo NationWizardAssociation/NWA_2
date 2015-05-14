@@ -160,17 +160,50 @@ public class GUI extends JFrame
 
 		queryRes = "Gothmog Doomsman of the Valar, 5, 100, Necromancer, 100, 100, Roofie, 100101";
 
-		//javac GUI.java 
-		//java -classpath ".:sqlite-jdbc-3.7.2.jar" GUI
+
 
 
 		class searchWIZ implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 
-				wQuery = wizTxtName.getText() + ", " + wizTxtLev.getText() + ", " + 
-						wizTxtSpell.getText();
+				one = wizTxtName.getText();
+				two = wizTxtLev.getText();
+				thr = wizTxtSpell.getText();
+
+				if (!one.equals("")) {
+					queryRes = "name," + one;
+					nam = true;
+				}
+
+				if (!two.equals("")) {
 				
-				//preparedStatement(statm);
+					if (nam) {
+						queryRes+= ",level," + two;
+						lev = true;
+					}
+					else {
+						queryRes = "level," + two;
+						lev = true;
+					}
+				}	
+				if (!thr.equals("")) {
+					
+					if (nam || lev) {
+						queryRes+= ",spellset," + thr;
+					}
+					else {
+						queryRes = "spellset," + thr;
+					}
+				
+				}
+
+				nam = false;
+				lev = false;
+				
+				System.out.println(queryRes);
+				NWA_PreparedStatements nwa = new NWA_PreparedStatements();
+				queryRes = nwa.searchWizard(wQuery);
+
 				
 				wizardRes.setText(queryRes);
 			}
@@ -183,10 +216,14 @@ public class GUI extends JFrame
 		class adWIZ implements ActionListener {
 			public void actionPerformed(ActionEvent arg0) {
 
-				wQuery = wizTxtName.getText() + ", " + wizTxtLev.getText() + ", " + 
-						wizTxtSpell.getText() + ", " + wizTxtHeal.getText()+ ", " + 
-						wizTxtAtk.getText()+ ", " + wizTxtDef.getText()+ ", " + 
-						wizTxtPet.getText()+ ", " + wizTxtGuild.getText();
+				wQuery = wizTxtName.getText() + "," 
+				+ wizTxtLev.getText() + "," 
+				+ wizTxtSpell.getText() + "," 
+				+ wizTxtHeal.getText()+ "," 
+				+ wizTxtAtk.getText()+ "," 
+				+ wizTxtDef.getText()+ "," 
+				+ wizTxtPet.getText()+ "," 
+				+ wizTxtGuild.getText();
 				
 				//preparedStatement(statm);
 				
@@ -371,6 +408,21 @@ public class GUI extends JFrame
 		bDef.setBounds(16, 60, 80, 23);
 		battlePanel.add(bDef);
 		
+		JLabel bWin = new JLabel("Winner");
+		bWin.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		bWin.setBounds(400, 29, 80, 23);
+		battlePanel.add(bWin);
+		
+		JLabel bLose = new JLabel("Loser");
+		bLose.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		bLose.setBounds(400, 60, 80, 23);
+		battlePanel.add(bLose);
+		
+		JLabel bMVW = new JLabel("Most Valuable Wizard");
+		bMVW.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		bMVW.setBounds(350, 90, 160, 23);
+		battlePanel.add(bMVW);
+		
 		updateLabel = new JLabel("");
 		updateLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		updateLabel.setBounds(16, 150, 150, 23);
@@ -385,6 +437,21 @@ public class GUI extends JFrame
 		bDefID.setBounds(100, 60, 122, 28);
 		battlePanel.add(bDefID);
 		bDefID.setColumns(10);
+		
+		bWinTxt = new JTextField();
+		bWinTxt.setBounds(500, 29, 122, 28);
+		battlePanel.add(bWinTxt);
+		bWinTxt.setColumns(10);
+		
+		bLoseTxt = new JTextField();
+		bLoseTxt.setBounds(500, 60, 122, 28);
+		battlePanel.add(bLoseTxt);
+		bLoseTxt.setColumns(10);
+		
+		bMVWTxt = new JTextField();
+		bMVWTxt.setBounds(500, 90, 122, 28);
+		battlePanel.add(bMVWTxt);
+		bMVWTxt.setColumns(10);
 		
 		Button battleButton = new Button("Battle");
 		battleButton.setBounds(230, 29, 70, 23);
@@ -446,12 +513,19 @@ public class GUI extends JFrame
 	private JLabel gTerr;
 	private JLabel gWizz;
 	private JLabel updateLabel;
+	private JTextField bWinTxt;
+	private JTextField bLoseTxt;
+	private JTextField bMVWTxt;
 
 	
 	private JTextField bAggID;
 	private JTextField bDefID;
 	
-	
+	String one = "";
+	String two = "";
+	String thr = "";
+	boolean nam = false;
+	boolean lev = false;
 	
 	private String wName = "";
 	private String wLev = "";	

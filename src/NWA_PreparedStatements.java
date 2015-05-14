@@ -23,20 +23,73 @@ public class NWA_PreparedStatements {
 			e.printStackTrace();
 		}
 	}
-    
 	
+	public void addGuild(String name){
+		try {
+			String stmt = ("SELECT MAX(GUILDid) FROM GUILD");
+			PreparedStatement p = connection.prepareStatement(stmt);
+			ResultSet r = p.executeQuery();
+			int id = r.getInt("MAX(GUILDid)");
+			id++;
+		
+			String stmt2 = "INSERT INTO guild (GUILDname, GUILDid, GUILDwins, GUILDlosses) VALUES (?, ?, 0, 0)";
+			p = connection.prepareStatement(stmt2);
+			p.setString(1, name);
+			p.setInt(2, id);
+			p.executeUpdate();
+			
+			System.out.print("Guild with name: " + name + "has been created with the id: " + id);
+			
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
+	public void updateWinner(int id){
+		try {
+		String stmt1 = "UPDATE guild SET GUILDwins = GUILDwins + 1 WHERE GUILDid = " + id;
+		
+			PreparedStatement p = connection.prepareStatement(stmt1);
+			p.executeUpdate();
+			
+			System.out.println("Wins + 1");
+		
+		String stmt2 = "UPDAte wizard SET WIZlevel = WIZlevel + 1 WHERE WIZguild = " + id;
+		
+		p = connection.prepareStatement(stmt2);
+		p.executeUpdate();
+		System.out.println("All wizards on team go up a level!");
+		
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public void updateLoser(int id){
+		try {
+		String stmt1 = "UPDATE guild SET GUILDlosses = GUILDlosses + 1 WHERE GUILDid = " + id;
+		
+			PreparedStatement p = connection.prepareStatement(stmt1);
+			p.executeUpdate();
+			
+			System.out.println("Wins -1");
+		
+		String stmt2 = "UPDAte wizard SET WIZlevel = WIZlevel + 1 WHERE WIZlevel < 3 AND WIZguild = " + id;
+		
+		p = connection.prepareStatement(stmt2);
+		p.executeUpdate();
+		System.out.println("Wizards with level less than 3 go up a level");
+		
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+}
 	public void searchWizard(String s){
 		try {
 		String q = "";
@@ -106,48 +159,190 @@ public class NWA_PreparedStatements {
 		
 		
 	}
-    
-	
-	
-	
-	
-	public void findWizardByName(){
-	try {
-		while(true){
-		
-	  String name = " ";
-	  
-	  System.out.println("Enter Wizard Name");
-	    name = scan.nextLine();
-	    System.out.println(name);
-		String stm1 = "SELECT WIZname, WIZguild, WIZspellset, WIZlevel FROM wizard WHERE WIZname = ?"; //???? does not return price values if price == ?, ORDER BY does not do anything
-	    PreparedStatement p;
-		
-		p = connection.prepareStatement(stm1);
-		//System.out.print(price + " " + order);
-	    p.clearParameters();
-	    p.setString(1, name);
-	    ResultSet r = p.executeQuery();
-		while(r.next()) {
-			System.out.println("name: " + r.getString("WIZname"));
-			System.out.println("Guild: " + r.getInt("WIZGuild"));
-			System.out.println("Specialty: " + r.getString("WIZspellset"));
-			System.out.println("level: " + r.getInt("WIZlevel"));
-			System.out.println("-----------------------------");
+	public void listGuildWizards(String s){
+		try {
+		 
+			  
+			  String q = "";
+				String guildName;
+				String guildID;
+				
+				String[] atr = s.split(",");
+				
+				boolean and = false;
+				for(int i = 0; i < atr.length; i++){
+					
+					if(atr[i].equals("guildName")){
+						q = q + ("GUILDname = " +"'" + atr[++i] +"' AND WIZguild = GUILDid");
+						if(i != atr.length-1){
+							and = true;
+						}
+					}
+					else if(atr[i].equals("guildID")){
+						if(and){
+							q = q + " AND ";
+						}
+						q = q + ("WIZguild = " + atr[++i]);
+						if(i != atr.length-1){
+							and = true;
+						}
+					}
+		  
+		  
+		    
+			String stm1 = "SELECT WIZname, WIZspellset, WIZlevel FROM wizard, guild WHERE " + q;
+		    PreparedStatement p;
+			p = connection.prepareStatement(stm1);
+		    p.clearParameters();
+		    ResultSet r = p.executeQuery();
+			while(r.next()) {
+				System.out.println("name: " + r.getString("WIZname"));
+				System.out.println("Specialty: " + r.getString("WIZspellset"));
+				System.out.println("level: " + r.getInt("WIZlevel"));
+				System.out.println("-----------------------------");
+			}
+			
+		  }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-	    System.out.println("Enter another value?(y/n): ");
-	    String exit = scan.next();
-	    if(exit.equals("n")){
-	       break;
-	    }
-	  }
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	}
 	
-}
+	
+	public void territoriesByGuild(String s){
+		
+		try {
+			
+			String q = "";
+			String guildName;
+			String guildID;
+			
+			String[] atr = s.split(",");
+			
+			boolean and = false;
+			for(int i = 0; i < atr.length; i++){
+				
+				if(atr[i].equals("guildName")){
+					q = q + ("GUILDname = " +"'" + atr[++i] +"'");
+					if(i != atr.length-1){
+						and = true;
+					}
+				}
+				else if(atr[i].equals("guildID")){
+					if(and){
+						q = q + " AND ";
+					}
+					q = q + ("GUILDid = "  + atr[++i]);
+					if(i != atr.length-1){
+						and = true;
+					}
+				}
+			
+				String stm1 = "SELECT TERRITORYlocation FROM territory, guild WHERE " + q;
+			    PreparedStatement p;
+				p = connection.prepareStatement(stm1);
+			    p.clearParameters();
+			    ResultSet r = p.executeQuery();
+				while(r.next()) {
+					System.out.println("Territory: " + r.getString("TERRITORYlocation"));
+					System.out.println("-----------------------------");
+				}
+			}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		public void lossesByGuild(String s){
+		
+		try {
+			String q = "";
+			String guildName;
+			String guildID;
+			
+			String[] atr = s.split(",");
+			
+			boolean and = false;
+			for(int i = 0; i < atr.length; i++){
+				
+				if(atr[i].equals("guildName")){
+					q = q + ("GUILDname = " +"'" + atr[++i] +"'");
+					if(i != atr.length-1){
+						and = true;
+					}
+				}
+				else if(atr[i].equals("guildID")){
+					if(and){
+						q = q + " AND ";
+					}
+					q = q + ("GUILDid = " + atr[++i]);
+					if(i != atr.length-1){
+						and = true;
+					}
+				}
+			
+				String stm1 = "SELECT GUILDlosses FROM guild WHERE " + q;
+			    PreparedStatement p;
+				p = connection.prepareStatement(stm1);
+			    p.clearParameters();
+			    ResultSet r = p.executeQuery();
+				while(r.next()) {
+					System.out.println("Losses: " + r.getInt("GUILDlosses"));
+					System.out.println("-----------------------------");
+				}
+			}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	public void winsByGuild(String s){
+		
+		try {
+			String q = "";
+			String guildName;
+			String guildID;
+			
+			String[] atr = s.split(",");
+			
+			boolean and = false;
+			for(int i = 0; i < atr.length; i++){
+				
+				if(atr[i].equals("guildName")){
+					q = q + ("GUILDname = " +"'" + atr[++i] +"'");
+					if(i != atr.length-1){
+						and = true;
+					}
+				}
+				else if(atr[i].equals("guildID")){
+					if(and){
+						q = q + " AND ";
+					}
+					q = q + ("GUILDid = " + atr[++i]);
+					if(i != atr.length-1){
+						and = true;
+					}
+				}
+		}
+			
+				String stm1 = "SELECT GUILDwins FROM guild WHERE " + q;
+			    PreparedStatement p;
+				p = connection.prepareStatement(stm1);
+			    p.clearParameters();
+			    ResultSet r = p.executeQuery();
+				while(r.next()) {
+					System.out.println("Wins: " + r.getInt("GUILDwins"));
+					System.out.println("-----------------------------");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
     
 	public void listGuildWizards(){
 		try {
@@ -229,7 +424,7 @@ public class NWA_PreparedStatements {
 		}
 	}
 	
-	public void addWizard(){		
+	public void addWizard(String s){		
 		try {
 			
 			String name;
@@ -240,20 +435,35 @@ public class NWA_PreparedStatements {
 			int atk;
 			int def;
 			
-			System.out.println("What is your name");
-			name = scan.next();
-			System.out.println("What Guild are you a member of (Enter ID)?");
-			guild = scan.nextInt();
-			System.out.println("What is your level?");
-			level = scan.nextInt();
-			System.out.println("What is your Spell set?");
-			SpellSet = scan.next();
-			System.out.println("What is you health");
-			health = scan.nextInt();
-			System.out.println("What is your attackk");
-			atk = scan.nextInt();
-			System.out.println("What is your defense");
-			def = scan.nextInt();
+			String[] atr
+			
+			
+			for(int i = 0; i < atr.length; i++){
+				
+				if(atr[i].equals("name")){
+					q = q + ("WIZname = " +"'" + atr[++i] +"'");
+					if(i != atr.length-1){
+						and = true;
+					}
+				}
+				else if(atr[i].equals("spellset")){
+					if(and){
+						q = q + " AND ";
+					}
+					q = q + ("WIZspellset = " + "'" + atr[++i] + "'");
+					if(i != atr.length-1){
+						and = true;
+					}
+				}
+				else if(atr[i].equals("level")){
+					if(and){
+						q = q + " AND ";
+					}
+					q = q + ("WIZlevel = " + atr[++i]);
+					if(i != atr.length-1){
+						and = true;
+					}
+				}
 			
 			
 			
