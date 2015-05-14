@@ -11,6 +11,7 @@ public class NWA_PreparedStatements {
 	Connection connection;
 	String genS = "";
     String genADD = "";
+    String theTextBack;
 	
 	public NWA_PreparedStatements(){
 		
@@ -90,7 +91,7 @@ public class NWA_PreparedStatements {
 			e.printStackTrace();
 		}
 }
-	public void searchWizard(String s){
+	public String searchWizard(String s){
 		try {
 		String q = "";
 		String name;
@@ -129,27 +130,28 @@ public class NWA_PreparedStatements {
 			
 		}
 		
-		System.out.println(q);
+		System.out.println(s);
 		String stmt = "SELECT WIZname, WIZguild, WIZlevel, WIZspellset, WIZhealth, WIZatk, WIZdef FROM wizard WHERE " + q;
+		System.out.println(stmt);
 		PreparedStatement p = connection.prepareStatement(stmt);
 	
 		ResultSet r = p.executeQuery();
-		
+		theTextBack = "";
 		while(r.next()) {
-			System.out.println("name: " + r.getString("WIZname"));
-			System.out.println("Guild: " + r.getInt("WIZguild"));
-			System.out.println("level: " + r.getInt("WIZlevel"));
-			System.out.println("Specialty: " + r.getString("WIZspellset"));
-			System.out.println("health: " + r.getInt("WIZhealth"));
-			System.out.println("attack: " + r.getInt("WIZatk"));
-			System.out.println("defense: " + r.getInt("WIZdef"));
-			System.out.println("-----------------------------");
+			theTextBack += r.getString("WIZname") +", " +
+			r.getInt("WIZguild") + ", " +
+			 r.getInt("WIZlevel") + ", " +
+			r.getString("WIZspellset") + ", " +
+			r.getInt("WIZhealth") + ", " +
+			r.getInt("WIZatk") + ", " +
+			r.getInt("WIZdef") + "\n";
 			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return theTextBack;
 		//System.out.println(q);
 		
 
@@ -423,48 +425,38 @@ public class NWA_PreparedStatements {
 			e.printStackTrace();
 		}
 	}
-	
+/*	
 	public void addWizard(String s){		
 		try {
 			
 			String name;
-			int guild;
-			int level;
+			String guild;
+			String level;
 			String SpellSet;
-			int health;
-			int atk;
-			int def;
+			String health;
+			String atk;
+			String def;
 			
-			String[] atr
-			
+			String[] atr = s.split(",");
+			String q = "";
 			
 			for(int i = 0; i < atr.length; i++){
-				
 				if(atr[i].equals("name")){
-					q = q + ("WIZname = " +"'" + atr[++i] +"'");
-					if(i != atr.length-1){
-						and = true;
-					}
+					name = atr[++i];
 				}
 				else if(atr[i].equals("spellset")){
-					if(and){
-						q = q + " AND ";
-					}
-					q = q + ("WIZspellset = " + "'" + atr[++i] + "'");
-					if(i != atr.length-1){
-						and = true;
-					}
+					SpellSet = atr[++i];
 				}
 				else if(atr[i].equals("level")){
-					if(and){
-						q = q + " AND ";
-					}
-					q = q + ("WIZlevel = " + atr[++i]);
-					if(i != atr.length-1){
-						and = true;
-					}
+					level = atr[++i];
 				}
-			
+				else if(atr[i].equals("health")){
+					health = atr[++i];
+				}
+				else if(atr[i].equals("atk")){
+					 = atr[++i];
+				}
+				
 			
 			
 			
@@ -489,6 +481,6 @@ public class NWA_PreparedStatements {
 		}
 		
 	}
-
+*/
 }
 

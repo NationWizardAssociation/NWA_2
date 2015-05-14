@@ -10,20 +10,19 @@ public class main {
 	
 	  public static void main(String[] args) throws ClassNotFoundException{
 		
-		 /* JFrame g = new GUI();
-		 g.setTitle("NWA");
-		 g.setVisible(true);
-	    g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		  */
+		 //JFrame g = new GUI();
+		 //g.setTitle("NWA");
+		 //g.setVisible(true);
+	     //g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		  
 		  NWA_PreparedStatements s = new NWA_PreparedStatements();
 		  
 		  
 		  
-		 s.updateLoser(100001); 
+		 //s.updateLoser(100001); 
 		 String m = "spellset,Fire";
 		  
-		 s.searchWizard(m);
+		 //s.searchWizard(m);
 		  
 		 //s.addGuild("sparkles");
 		 // s.findWizardByName();
